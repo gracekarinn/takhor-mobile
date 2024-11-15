@@ -201,7 +201,8 @@ class _ProductFormState extends State<ProductForm> {
                         );
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MyHomePage()),
+                          MaterialPageRoute(
+                              builder: (context) => const MyHomePage()),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
