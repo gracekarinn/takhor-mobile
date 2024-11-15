@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takhor_mobile/screens/list_productentry.dart';
 import 'package:takhor_mobile/screens/login.dart';
+import 'package:takhor_mobile/screens/product_form.dart';
 import 'package:takhor_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -58,6 +59,12 @@ class MyHomePage extends StatelessWidget {
                           ..showSnackBar(const SnackBar(
                               content: Text(
                                   "Kamu telah menekan tombol Lihat Produk!")));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProductEntryPage(),
+                          ),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -97,7 +104,7 @@ class MyHomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ProductEntryPage(),
+                            builder: (context) => ProductForm(),
                           ),
                         );
                       },
