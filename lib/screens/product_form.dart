@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:takhor_mobile/widgets/left_drawer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:takhor_mobile/screens/menu.dart';
 
 class ProductForm extends StatefulWidget {
   @override
@@ -61,6 +64,8 @@ class _ProductFormState extends State<ProductForm> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tambah Produk'),
@@ -167,49 +172,46 @@ class _ProductFormState extends State<ProductForm> {
               const SizedBox(height: 24.0),
               ElevatedButton(
                 style: const ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll<Color>(Colors.indigo),
-                  foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
-                  padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                  backgroundColor:
+                      MaterialStatePropertyAll<Color>(Colors.indigo),
+                  foregroundColor:
+                      MaterialStatePropertyAll<Color>(Colors.white),
+                  padding: MaterialStatePropertyAll<EdgeInsetsGeometry>(
                     EdgeInsets.symmetric(vertical: 16.0),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Produk berhasil tersimpan'),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Nama: ${_namaController.text}'),
-                                Text('Harga: Rp ${_hargaController.text}'),
-                                Text('Stok: ${_stokController.text}'),
-                                Text('Deskripsi: ${_deskripsiController.text}'),
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                _formKey.currentState!.reset();
-                                _namaController.clear();
-                                _hargaController.clear();
-                                _stokController.clear();
-                                _deskripsiController.clear();
-                                setState(() {
-                                  _imageUrl = null;
-                                });
-                              },
-                            ),
-                          ],
-                        );
-                      },
+                    final response = await request.postJson(
+                      "http://localhost:8000/create-flutter/",
+                      jsonEncode(<String, String>{
+                        'nama': _namaController.text,
+                        'harga': _hargaController.text,
+                        'stok': _stokController.text,
+                        'deskripsi': _deskripsiController.text,
+                        'image_url': _imageUrl ?? '',
+                      }),
                     );
+                    if (context.mounted) {
+                      if (response['status'] == 'success') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Produk berhasil disimpan!"),
+                          ),
+                        );
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyHomePage()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text("Terdapat kesalahan, silakan coba lagi."),
+                          ),
+                        );
+                      }
+                    }
                   }
                 },
                 child: const Text(
