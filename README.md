@@ -380,10 +380,12 @@ Django menggunakan decorators @login_required untuk proteksi views yang membutuh
 **6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).**
 
 1. Setup Django & Flutter
+```bash
 # Django 
 - Buatlah django-app bernama authentication pada project Django.
 - Tambahkan authentication ke INSTALLED_APPS pada main project settings.py aplikasi Django kamu.
 - Menambahkan corsheaders pada `MIDDLEWARE' dan `INSTALLED_APPS`. Kemudian, menambahkan beberapa variabel cors pada `settings.py`
+```
 
 2. Authentication Django
 ```python
