@@ -35,7 +35,7 @@ class ProductEntry {
 }
 
 class Fields {
-  int user;
+  String user;
   String name;
   int price;
   String description;
@@ -52,7 +52,7 @@ class Fields {
   });
 
   factory Fields.fromJson(Map<String, dynamic> json) => Fields(
-        user: json["user"],
+        user: json["user"].toString(),
         name: json["name"],
         price: json["price"],
         description: json["description"],
